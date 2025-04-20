@@ -1,50 +1,84 @@
-# Data Preprocessing Tool
+# Data Preprocessing Tool 🔧
 
-A powerful SaaS tool for preprocessing datasets for machine learning and AI applications. This tool provides both a FastAPI backend and a Streamlit frontend for easy data preprocessing tasks.
+[![Python](https://img.shields.io/badge/Python-3.9%2B-blue.svg)](https://www.python.org/downloads/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.104.1-green.svg)](https://fastapi.tiangolo.com/)
+[![Streamlit](https://img.shields.io/badge/Streamlit-1.28.1-red.svg)](https://streamlit.io/)
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-## Features
+> A powerful SaaS tool for preprocessing datasets in machine learning and AI applications. Built with FastAPI and Streamlit, it provides an intuitive interface for handling tabular, text, and image data preprocessing tasks.
 
-### Tabular Data Processing
-- Load and validate CSV files
-- Handle missing values (strategies: mean, drop)
-- Remove duplicate rows
-- Scale numeric features (methods: standard, minmax, robust)
-- Drop specified columns
-- Get detailed dataset statistics
-- Export processed data as CSV
+## ✨ Features
 
-### Text Data Processing
-- Load and process text data
-- Convert text to lowercase
-- Remove punctuation
-- Remove numbers
-- Remove extra whitespace
-- Remove stopwords
-- Lemmatize text
-- Get word frequencies
-- Get part-of-speech tags
-- Get text statistics
-- Export processed text
+### 📊 Tabular Data Processing
+- **Missing Value Handling**
+  - Strategy options: mean imputation, row dropping
+  - Column-specific handling
+  - Validation of imputed values
+- **Feature Scaling**
+  - Standard scaling (z-score normalization)
+  - Min-max scaling
+  - Robust scaling
+- **Data Cleaning**
+  - Duplicate row removal
+  - Column dropping
+  - Data type validation
+- **Statistics & Analysis**
+  - Detailed dataset statistics
+  - Missing value analysis
+  - Column type detection
 
-### Image Processing
-- Load and validate image files
-- Process images with various transformations
-- Support for base64-encoded images
-- Preview processed images
-- Download processed images
+### 📝 Text Processing
+- **Text Cleaning**
+  - Case normalization
+  - Punctuation removal
+  - Number removal
+  - Whitespace normalization
+- **NLP Operations**
+  - Stopword removal
+  - Text lemmatization
+  - Word frequency analysis
+  - Part-of-speech tagging
+- **Analysis**
+  - Text statistics
+  - Word count metrics
+  - Sentence structure analysis
 
-## Setup
+### 🖼️ Image Processing
+- **Image Handling**
+  - Multiple format support (JPG, PNG)
+  - Base64 encoding/decoding
+  - Size validation
+- **Processing Features**
+  - Image transformations
+  - Format conversion
+  - Preview generation
+- **Output Options**
+  - Processed image download
+  - Multiple export formats
+  - Quality control
+
+## 🚀 Quick Start
+
+### Prerequisites
+- Python 3.9 or higher
+- pip package manager
+- Virtual environment (recommended)
+
+### Installation
 
 1. Clone the repository:
 ```bash
-git clone <repository-url>
+git clone https://github.com/vismaytk/preproc.git
 cd preproc
 ```
 
-2. Create a virtual environment and activate it:
+2. Create and activate virtual environment:
 ```bash
 python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+# Windows
+venv\Scripts\activate
+# Unix/MacOS
+source venv/bin/activate
 ```
 
 3. Install dependencies:
@@ -52,7 +86,13 @@ source venv/bin/activate  # On Windows: venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-## Running the Application
+4. Set up environment variables:
+```bash
+cp .env.example .env
+# Edit .env with your configurations
+```
+
+### Running the Application
 
 1. Start the backend server:
 ```bash
@@ -64,77 +104,112 @@ uvicorn backend.main:app --reload
 streamlit run frontend/app.py
 ```
 
-## Usage
+3. Access the application:
+- Frontend UI: http://localhost:8501
+- API Documentation: http://localhost:8000/docs
+
+## 💻 Usage
 
 ### Web Interface
-1. Open your browser and navigate to `http://localhost:8501`
-2. Upload your data file (CSV, text, or image)
-3. Select preprocessing options
-4. View and download the processed data
+
+1. **Upload Data**
+   - Support for CSV, text files, and images
+   - Drag-and-drop functionality
+   - File validation
+
+2. **Configure Processing**
+   - Select preprocessing options
+   - Set parameters
+   - Preview changes
+
+3. **Process & Download**
+   - Execute preprocessing
+   - Preview results
+   - Download processed data
 
 ### API Endpoints
 
 #### Tabular Data
-- `POST /tabular/process`: Process CSV data
-- `GET /tabular/statistics`: Get dataset statistics
-
-#### Text Data
-- `POST /text/process`: Process text data
-- `GET /text/statistics`: Get text statistics
-- `GET /text/frequencies`: Get word frequencies
-- `GET /text/pos-tags`: Get part-of-speech tags
-
-#### Image Data
-- `POST /image/process`: Process image data
-- `GET /image/info`: Get image information
-
-## Development
-
-### Running Tests
-```bash
-python -m pytest tests/ -v
 ```
+POST /tabular/process
+GET  /tabular/statistics
+```
+
+#### Text Processing
+```
+POST /text/process
+GET  /text/statistics
+GET  /text/frequencies
+GET  /text/pos-tags
+```
+
+#### Image Processing
+```
+POST /image/process
+GET  /image/info
+```
+
+## 🛠️ Development
 
 ### Project Structure
 ```
 preproc/
 ├── backend/
 │   ├── processors/
-│   │   ├── tabular.py
-│   │   ├── text.py
-│   │   └── image.py
-│   └── main.py
+│   │   ├── tabular.py   # Tabular data processing
+│   │   ├── text.py      # Text processing
+│   │   └── image.py     # Image processing
+│   └── main.py          # FastAPI application
 ├── frontend/
-│   └── app.py
-├── tests/
-│   ├── test_tabular.py
-│   ├── test_text.py
-│   └── test_image.py
-└── requirements.txt
+│   └── app.py           # Streamlit interface
+├── tests/               # Test suite
+├── logs/               # Application logs
+├── processed_data/     # Processed output
+└── uploads/           # Temporary uploads
 ```
 
-## Error Handling
-- Comprehensive error handling for all processing operations
-- Detailed error messages and logging
-- Validation of input data and parameters
+### Running Tests
+```bash
+# Run all tests
+python -m pytest tests/ -v
 
-## Data Validation
-- CSV file format validation
-- Text encoding validation
-- Image format and size validation
-- Parameter validation for all operations
+# Run with coverage
+python -m pytest tests/ --cov=backend
+```
 
-## Logging
-- Detailed logging of all operations
-- Error tracking and debugging information
-- Processing step tracking
+## 🔒 Security
 
-## Contributing
+- Input validation for all file uploads
+- Size limits for uploads
+- API key authentication
+- CORS protection
+- Secure file handling
+
+## 📝 Configuration
+
+Key configuration options in `.env`:
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| MAX_UPLOAD_SIZE | Maximum file size (MB) | 10 |
+| MAX_ROWS | Maximum rows in CSV | 1000000 |
+| MAX_TEXT_LENGTH | Maximum text length | 1000000 |
+| MAX_IMAGE_DIMENSION | Maximum image dimension | 4096 |
+
+## 🤝 Contributing
+
 1. Fork the repository
-2. Create a feature branch
+2. Create your feature branch
 3. Commit your changes
 4. Push to the branch
 5. Create a Pull Request
 
-## License
-This project is licensed under the MIT License - see the LICENSE file for details. 
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- Built with modern Python tools and libraries
+- Inspired by real-world preprocessing needs
+- Community contributions welcome 
