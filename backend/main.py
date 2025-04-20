@@ -15,7 +15,7 @@ from datetime import datetime
 from pathlib import Path
 
 # Import processors
-from .processors.tabular import TabularProcessor
+from processors.tabular import TabularProcessor
 
 # Configure logging
 logging.basicConfig(
