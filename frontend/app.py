@@ -24,7 +24,7 @@ This tool helps you preprocess various types of data for machine learning:
 - Image Data (PNG, JPG)
 """)
 
-def run_frontend(api_base_url="http://localhost:8000"):
+def run_frontend(api_base_url="https://preproc-bakend.onrender.com"):
     def process_tabular_data(file, options):
         try:
             files = {"file": file}
