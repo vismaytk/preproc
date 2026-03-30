@@ -13,7 +13,11 @@ import httpx
 import pandas as pd
 
 # Bug Fix #6: URL from env var only, never hardcoded
-API_BASE_URL = os.getenv("API_URL", "http://localhost:8000")
+try:
+    import streamlit as st
+    API_BASE_URL = st.secrets.get("API_URL", os.getenv("API_URL", "http://localhost:8000"))
+except Exception:
+    API_BASE_URL = os.getenv("API_URL", "http://localhost:8000")
 TIMEOUT = 60.0  # seconds
 
 
