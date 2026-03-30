@@ -49,12 +49,9 @@ class AppConfig(BaseSettings):
     max_image_dimension: int = 4096
     image_quality: int = 85
 
-    # Rate Limiting
-    rate_limit: str = "10/minute"
 
     # Logging
     log_level: str = "INFO"
-    log_dir: str = "logs"
 
 
 @lru_cache

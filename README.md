@@ -4,103 +4,8 @@
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.109-009688?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
 [![Streamlit](https://img.shields.io/badge/Streamlit-1.31-FF4B4B?logo=streamlit&logoColor=white)](https://streamlit.io/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![CI](https://github.com/vismaytk/preproc/actions/workflows/ci.yml/badge.svg)](https://github.com/vismaytk/preproc/actions/workflows/ci.yml)
 
-> A professional SaaS data preprocessing tool for machine learning workflows. Clean, transform, and analyze tabular, text, and image data through a beautiful web interface backed by a production-grade API.
-
-<!-- screenshot here -->
-
-## What It Does
-
-DataPrep Pro is a full-stack data preprocessing platform that automates the tedious data cleaning work that machine learning engineers deal with daily. Upload your raw data, configure the preprocessing pipeline, preview the results with interactive visualizations, and download the cleaned output — all in seconds, no code required.
-
----
-
-## Tech Stack
-
-| Technology | Purpose | Version |
-|---|---|---|
-| **FastAPI** | REST API backend | 0.109+ |
-| **Streamlit** | Interactive web UI | 1.31+ |
-| **Pydantic v2** | Request/response validation | 2.4+ |
-| **scikit-learn** | Tabular preprocessing (scaling, imputation) | 1.4+ |
-| **NLTK** | NLP text processing pipeline | 3.8+ |
-| **langdetect** | Automatic language detection | 1.0+ |
-| **OpenCV + Pillow** | Image transformations | 4.9+ / 10.2+ |
-| **Plotly** | Interactive data visualizations | 5.18+ |
-| **structlog** | Structured JSON logging | 24.1+ |
-| **slowapi** | API rate limiting | 0.1+ |
-| **httpx** | Async HTTP client | 0.27+ |
-| **Docker** | Containerized deployment | - |
-| **GitHub Actions** | CI/CD pipeline | - |
-
----
-
-## Getting Started
-
-### Prerequisites
-
-- Python 3.11+
-- pip or uv
-
-### Installation
-
-```bash
-# Clone the repository
-git clone https://github.com/vismaytk/preproc.git
-cd preproc
-
-# Create and activate virtual environment
-python -m venv venv
-# Windows
-venv\Scripts\activate
-# Unix/macOS
-source venv/bin/activate
-
-# Install with dev dependencies
-pip install -e ".[dev]"
-
-# Download NLTK data
-python -c "import nltk; nltk.download('punkt'); nltk.download('punkt_tab'); nltk.download('stopwords'); nltk.download('wordnet'); nltk.download('averaged_perceptron_tagger'); nltk.download('averaged_perceptron_tagger_eng')"
-
-# Set up environment
-cp .env.example .env
-```
-
-### Running Locally
-
-```bash
-# Option 1: Start both services with the convenience script
-bash scripts/start.sh
-
-# Option 2: Start individually
-uvicorn api.main:app --reload          # API on :8000
-streamlit run app/Home.py              # UI on :8501
-```
-
-### Docker
-
-```bash
-docker compose up --build
-```
-
-Access: **UI** → http://localhost:8501 | **API Docs** → http://localhost:8000/docs
-
----
-
-## API Reference
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| `GET` | `/` | API info |
-| `GET` | `/health` | Health check |
-| `POST` | `/tabular/process` | Process CSV data (missing values, scaling, dedup) |
-| `POST` | `/text/process` | Process text data (NLP pipeline) |
-| `GET` | `/text/frequencies/{session_id}` | Get word frequencies for a session |
-| `GET` | `/text/pos-tags/{session_id}` | Get POS tags for a session |
-| `POST` | `/image/process` | Process image data (resize, normalize, convert) |
-
-Full interactive docs available at `/docs` (Swagger) and `/redoc` (ReDoc).
+> A professional data preprocessing tool for machine learning workflows. Clean, transform, and analyze tabular, text, and image data through a beautiful web interface backed by a FastAPI backend.
 
 ---
 
@@ -117,7 +22,7 @@ Full interactive docs available at `/docs` (Swagger) and `/redoc` (ReDoc).
 ### 📝 Text Data
 - **NLP Pipeline**: Tokenization, stop word removal, lemmatization
 - **Cleaning**: URL removal, email removal, whitespace normalization
-- **Language Detection**: Automatic with English detection warning
+- **Language Detection**: Automatic detection with English verification
 - **Analysis**: Word frequencies, POS tagging, vocabulary richness
 - **Stateful Sessions**: Process once, query frequencies and POS tags via API
 
@@ -126,6 +31,85 @@ Full interactive docs available at `/docs` (Swagger) and `/redoc` (ReDoc).
 - **Adjustments**: Brightness and contrast control
 - **Format Conversion**: PNG, JPEG, WEBP
 - **Analysis**: Per-channel (R/G/B) mean pixel values
+
+---
+
+## Tech Stack
+
+| Technology | Purpose |
+|---|---|
+| **FastAPI** | REST API backend |
+| **Streamlit** | Interactive web UI |
+| **Pydantic v2** | Request/response validation |
+| **scikit-learn** | Tabular preprocessing |
+| **NLTK** | NLP text processing |
+| **langdetect** | Automatic language detection |
+| **OpenCV + Pillow** | Image transformations |
+| **Plotly** | Interactive visualizations |
+| **structlog** | Structured logging |
+| **httpx** | Frontend → API HTTP client |
+
+---
+
+## Getting Started
+
+### Prerequisites
+
+- Python 3.11+
+
+### Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/vismaytk/preproc.git
+cd preproc
+
+# Create and activate virtual environment
+python -m venv venv
+# Windows
+venv\Scripts\activate
+# Unix/macOS
+source venv/bin/activate
+
+# Install dependencies (with dev tools)
+pip install -e ".[dev]"
+
+# Download NLTK data
+python -c "import nltk; nltk.download('punkt'); nltk.download('punkt_tab'); nltk.download('stopwords'); nltk.download('wordnet'); nltk.download('averaged_perceptron_tagger'); nltk.download('averaged_perceptron_tagger_eng')"
+
+# Set up environment
+cp .env.example .env
+```
+
+### Running Locally
+
+Open two terminals:
+
+```bash
+# Terminal 1 — Start the API (port 8000)
+python -m uvicorn api.main:app --reload
+
+# Terminal 2 — Start the UI (port 8501)
+python -m streamlit run app/Home.py
+```
+
+- **UI**: http://localhost:8501
+- **API Docs (Swagger)**: http://localhost:8000/docs
+- **API Docs (ReDoc)**: http://localhost:8000/redoc
+
+---
+
+## API Reference
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | `/` | API info |
+| `GET` | `/health` | Health check |
+| `POST` | `/tabular/process` | Process CSV data |
+| `POST` | `/text/process` | Process text data |
+| `GET` | `/text/frequencies/{session_id}` | Word frequencies for a session |
+| `GET` | `/text/pos-tags/{session_id}` | POS tags for a session |
+| `POST` | `/image/process` | Process image data |
 
 ---
 
@@ -165,7 +149,7 @@ dataprep-pro/
 │   │   └── download_button.py
 │   ├── utils/
 │   │   ├── api_client.py       ← centralized httpx client
-│   │   └── charts.py           ← Plotly visualization helpers
+│   │   └── charts.py           ← Plotly chart helpers
 │   └── Home.py                 ← landing page
 ├── tests/
 │   ├── unit/
@@ -174,15 +158,17 @@ dataprep-pro/
 │   │   └── test_image.py
 │   ├── integration/
 │   │   └── test_api.py
-│   └── conftest.py
-├── samples/                    ← sample data files
-├── scripts/
-│   └── start.sh
-├── .github/workflows/
-│   └── ci.yml
-├── pyproject.toml
-├── Dockerfile
-├── docker-compose.yml
+│   └── conftest.py             ← shared fixtures
+├── samples/                    ← sample data for demo
+│   ├── sample.csv
+│   ├── sample.txt
+│   └── sample.png
+├── .streamlit/
+│   └── config.toml             ← Streamlit theme config
+├── .env.example                ← environment variable template
+├── .gitignore
+├── LICENSE
+├── pyproject.toml              ← dependencies + tool config
 └── README.md
 ```
 
@@ -192,29 +178,14 @@ dataprep-pro/
 
 ```bash
 # Run all tests
-pytest tests/ -v
+python -m pytest tests/ -v
 
 # Run with coverage
-pytest tests/ --cov=api --cov-report=term-missing
+python -m pytest tests/ --cov=api --cov-report=term-missing
 
 # Lint
-ruff check api/ app/
-
-# Type check
-mypy api/
+python -m ruff check api/ app/
 ```
-
----
-
-## Contributing
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Write tests for your changes
-4. Ensure `pytest` and `ruff check` pass
-5. Commit your changes (`git commit -m 'Add amazing feature'`)
-6. Push to the branch (`git push origin feature/amazing-feature`)
-7. Open a Pull Request
 
 ---
 
@@ -225,5 +196,5 @@ This project is licensed under the MIT License — see the [LICENSE](LICENSE) fi
 ---
 
 <p align="center">
-  Built with ❤️ by <a href="https://github.com/vismaytk">Vismay TK</a>
+  Built with ❤️ by <a href="https://github.com/vismaytk">Vismay</a>
 </p>

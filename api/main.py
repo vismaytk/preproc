@@ -8,9 +8,6 @@ from datetime import datetime
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from slowapi import Limiter, _rate_limit_exceeded_handler
-from slowapi.errors import RateLimitExceeded
-from slowapi.util import get_remote_address
 
 from api.core.config import get_settings
 from api.core.logging import setup_logging
@@ -33,11 +30,6 @@ def create_app() -> FastAPI:
         docs_url="/docs",
         redoc_url="/redoc",
     )
-
-    # --- Rate Limiter ---
-    limiter = Limiter(key_func=get_remote_address, default_limits=[settings.rate_limit])
-    app.state.limiter = limiter
-    app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
     # --- CORS (Bug Fix #5: read from config, not hardcoded "*") ---
     app.add_middleware(

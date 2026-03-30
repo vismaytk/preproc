@@ -37,8 +37,6 @@ env/
 .settings/
 
 # Logs
-logs/*
-!logs/.gitkeep
 *.log
 
 # Test / Coverage
@@ -57,15 +55,8 @@ coverage.xml
 
 # Project specific
 .DS_Store
-processed_data/
-uploads/
 .env.local
 .env.*.local
-
-# Keep empty directories
-!logs/.gitkeep
-!processed_data/.gitkeep
-!uploads/.gitkeep
 
 # Jupyter
 .ipynb_checkpoints
@@ -74,3 +65,8 @@ uploads/
 dist/
 build/
 *.pyc
+
+# Generated directories
+logs/
+processed_data/
+uploads/

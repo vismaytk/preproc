@@ -2,7 +2,6 @@
 
 import logging
 import sys
-from pathlib import Path
 
 import structlog
 
@@ -13,9 +12,6 @@ def setup_logging() -> None:
     """Configure structlog for structured JSON logging."""
     settings = get_settings()
 
-    # Create logs directory
-    Path(settings.log_dir).mkdir(exist_ok=True)
-
     # Configure standard logging
     log_level = getattr(logging, settings.log_level.upper(), logging.INFO)
 
@@ -24,11 +20,6 @@ def setup_logging() -> None:
         stream=sys.stdout,
         level=log_level,
     )
-
-    # Add file handler
-    file_handler = logging.FileHandler(Path(settings.log_dir) / "app.log")
-    file_handler.setLevel(log_level)
-    logging.getLogger().addHandler(file_handler)
 
     # Configure structlog
     structlog.configure(
