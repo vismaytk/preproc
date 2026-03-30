@@ -1,215 +1,229 @@
-# Data Preprocessing Tool 🔧
+# ⚡ DataPrep Pro
 
-[![Python](https://img.shields.io/badge/Python-3.9%2B-blue.svg)](https://www.python.org/downloads/)
-[![FastAPI](https://img.shields.io/badge/FastAPI-0.104.1-green.svg)](https://fastapi.tiangolo.com/)
-[![Streamlit](https://img.shields.io/badge/Streamlit-1.28.1-red.svg)](https://streamlit.io/)
-[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Python 3.11](https://img.shields.io/badge/Python-3.11-3776AB?logo=python&logoColor=white)](https://www.python.org/downloads/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.109-009688?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
+[![Streamlit](https://img.shields.io/badge/Streamlit-1.31-FF4B4B?logo=streamlit&logoColor=white)](https://streamlit.io/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![CI](https://github.com/vismaytk/preproc/actions/workflows/ci.yml/badge.svg)](https://github.com/vismaytk/preproc/actions/workflows/ci.yml)
 
-> A powerful SaaS tool for preprocessing datasets in machine learning and AI applications. Built with FastAPI and Streamlit, it provides an intuitive interface for handling tabular, text, and image data preprocessing tasks.
+> A professional SaaS data preprocessing tool for machine learning workflows. Clean, transform, and analyze tabular, text, and image data through a beautiful web interface backed by a production-grade API.
 
-## ✨ Features
+<!-- screenshot here -->
 
-### 📊 Tabular Data Processing
-- **Missing Value Handling**
-  - Strategy options: mean imputation, row dropping
-  - Column-specific handling
-  - Validation of imputed values
-- **Feature Scaling**
-  - Standard scaling (z-score normalization)
-  - Min-max scaling
-  - Robust scaling
-- **Data Cleaning**
-  - Duplicate row removal
-  - Column dropping
-  - Data type validation
-- **Statistics & Analysis**
-  - Detailed dataset statistics
-  - Missing value analysis
-  - Column type detection
+## What It Does
 
-### 📝 Text Processing
-- **Text Cleaning**
-  - Case normalization
-  - Punctuation removal
-  - Number removal
-  - Whitespace normalization
-- **NLP Operations**
-  - Stopword removal
-  - Text lemmatization
-  - Word frequency analysis
-  - Part-of-speech tagging
-- **Analysis**
-  - Text statistics
-  - Word count metrics
-  - Sentence structure analysis
+DataPrep Pro is a full-stack data preprocessing platform that automates the tedious data cleaning work that machine learning engineers deal with daily. Upload your raw data, configure the preprocessing pipeline, preview the results with interactive visualizations, and download the cleaned output — all in seconds, no code required.
 
-### 🖼️ Image Processing
-- **Image Handling**
-  - Multiple format support (JPG, PNG)
-  - Base64 encoding/decoding
-  - Size validation
-- **Processing Features**
-  - Image transformations
-  - Format conversion
-  - Preview generation
-- **Output Options**
-  - Processed image download
-  - Multiple export formats
-  - Quality control
+---
 
-## 🚀 Quick Start
+## Tech Stack
+
+| Technology | Purpose | Version |
+|---|---|---|
+| **FastAPI** | REST API backend | 0.109+ |
+| **Streamlit** | Interactive web UI | 1.31+ |
+| **Pydantic v2** | Request/response validation | 2.4+ |
+| **scikit-learn** | Tabular preprocessing (scaling, imputation) | 1.4+ |
+| **NLTK** | NLP text processing pipeline | 3.8+ |
+| **langdetect** | Automatic language detection | 1.0+ |
+| **OpenCV + Pillow** | Image transformations | 4.9+ / 10.2+ |
+| **Plotly** | Interactive data visualizations | 5.18+ |
+| **structlog** | Structured JSON logging | 24.1+ |
+| **slowapi** | API rate limiting | 0.1+ |
+| **httpx** | Async HTTP client | 0.27+ |
+| **Docker** | Containerized deployment | - |
+| **GitHub Actions** | CI/CD pipeline | - |
+
+---
+
+## Getting Started
 
 ### Prerequisites
-- Python 3.9 or higher
-- pip package manager
-- Virtual environment (recommended)
+
+- Python 3.11+
+- pip or uv
 
 ### Installation
 
-1. Clone the repository:
 ```bash
+# Clone the repository
 git clone https://github.com/vismaytk/preproc.git
 cd preproc
-```
 
-2. Create and activate virtual environment:
-```bash
+# Create and activate virtual environment
 python -m venv venv
 # Windows
 venv\Scripts\activate
-# Unix/MacOS
+# Unix/macOS
 source venv/bin/activate
-```
 
-3. Install dependencies:
-```bash
-pip install -r requirements.txt
-```
+# Install with dev dependencies
+pip install -e ".[dev]"
 
-4. Set up environment variables:
-```bash
+# Download NLTK data
+python -c "import nltk; nltk.download('punkt'); nltk.download('punkt_tab'); nltk.download('stopwords'); nltk.download('wordnet'); nltk.download('averaged_perceptron_tagger'); nltk.download('averaged_perceptron_tagger_eng')"
+
+# Set up environment
 cp .env.example .env
-# Edit .env with your configurations
 ```
 
-### Running the Application
+### Running Locally
 
-1. Start the backend server:
 ```bash
-uvicorn backend.main:app --reload
+# Option 1: Start both services with the convenience script
+bash scripts/start.sh
+
+# Option 2: Start individually
+uvicorn api.main:app --reload          # API on :8000
+streamlit run app/Home.py              # UI on :8501
 ```
 
-2. Start the frontend application:
+### Docker
+
 ```bash
-streamlit run frontend/app.py
+docker compose up --build
 ```
 
-3. Access the application:
-- Frontend UI: http://localhost:8501
-- API Documentation: http://localhost:8000/docs
+Access: **UI** → http://localhost:8501 | **API Docs** → http://localhost:8000/docs
 
-## 💻 Usage
+---
 
-### Web Interface
+## API Reference
 
-1. **Upload Data**
-   - Support for CSV, text files, and images
-   - Drag-and-drop functionality
-   - File validation
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | `/` | API info |
+| `GET` | `/health` | Health check |
+| `POST` | `/tabular/process` | Process CSV data (missing values, scaling, dedup) |
+| `POST` | `/text/process` | Process text data (NLP pipeline) |
+| `GET` | `/text/frequencies/{session_id}` | Get word frequencies for a session |
+| `GET` | `/text/pos-tags/{session_id}` | Get POS tags for a session |
+| `POST` | `/image/process` | Process image data (resize, normalize, convert) |
 
-2. **Configure Processing**
-   - Select preprocessing options
-   - Set parameters
-   - Preview changes
+Full interactive docs available at `/docs` (Swagger) and `/redoc` (ReDoc).
 
-3. **Process & Download**
-   - Execute preprocessing
-   - Preview results
-   - Download processed data
+---
 
-### API Endpoints
+## Features
 
-#### Tabular Data
+### 📊 Tabular Data
+- **Missing Values**: Drop, mean, or median imputation
+- **Deduplication**: Remove duplicate rows
+- **Feature Scaling**: Standard, MinMax, or Robust scaling
+- **Categorical Encoding**: Label or One-Hot encoding
+- **Outlier Detection**: IQR and Z-score methods
+- **Visualizations**: Distributions, correlation matrix, missing value heatmap
+
+### 📝 Text Data
+- **NLP Pipeline**: Tokenization, stop word removal, lemmatization
+- **Cleaning**: URL removal, email removal, whitespace normalization
+- **Language Detection**: Automatic with English detection warning
+- **Analysis**: Word frequencies, POS tagging, vocabulary richness
+- **Stateful Sessions**: Process once, query frequencies and POS tags via API
+
+### 🖼️ Image Data
+- **Transformations**: Resize, grayscale, normalize
+- **Adjustments**: Brightness and contrast control
+- **Format Conversion**: PNG, JPEG, WEBP
+- **Analysis**: Per-channel (R/G/B) mean pixel values
+
+---
+
+## Project Structure
+
 ```
-POST /tabular/process
-GET  /tabular/statistics
-```
-
-#### Text Processing
-```
-POST /text/process
-GET  /text/statistics
-GET  /text/frequencies
-GET  /text/pos-tags
-```
-
-#### Image Processing
-```
-POST /image/process
-GET  /image/info
-```
-
-## 🛠️ Development
-
-### Project Structure
-```
-preproc/
-├── backend/
+dataprep-pro/
+├── api/                        ← FastAPI backend
+│   ├── core/
+│   │   ├── config.py           ← pydantic-settings configuration
+│   │   ├── logging.py          ← structlog setup
+│   │   └── exceptions.py       ← custom HTTP exceptions
 │   ├── processors/
-│   │   ├── tabular.py   # Tabular data processing
-│   │   ├── text.py      # Text processing
-│   │   └── image.py     # Image processing
-│   └── main.py          # FastAPI application
-├── frontend/
-│   └── app.py           # Streamlit interface
-├── tests/               # Test suite
-├── logs/               # Application logs
-├── processed_data/     # Processed output
-└── uploads/           # Temporary uploads
+│   │   ├── base.py             ← abstract BaseProcessor
+│   │   ├── tabular.py          ← CSV/DataFrame processing
+│   │   ├── text.py             ← NLP text processing
+│   │   └── image.py            ← image transformations
+│   ├── routes/
+│   │   ├── tabular.py          ← /tabular/* endpoints
+│   │   ├── text.py             ← /text/* endpoints
+│   │   └── image.py            ← /image/* endpoints
+│   ├── schemas/
+│   │   ├── tabular.py          ← Pydantic v2 response models
+│   │   ├── text.py
+│   │   └── image.py
+│   ├── middleware/
+│   │   └── logging.py          ← request logging middleware
+│   └── main.py                 ← app factory
+├── app/                        ← Streamlit frontend
+│   ├── pages/
+│   │   ├── 1_tabular.py
+│   │   ├── 2_text.py
+│   │   └── 3_image.py
+│   ├── components/
+│   │   ├── file_uploader.py
+│   │   ├── stats_panel.py
+│   │   └── download_button.py
+│   ├── utils/
+│   │   ├── api_client.py       ← centralized httpx client
+│   │   └── charts.py           ← Plotly visualization helpers
+│   └── Home.py                 ← landing page
+├── tests/
+│   ├── unit/
+│   │   ├── test_tabular.py
+│   │   ├── test_text.py
+│   │   └── test_image.py
+│   ├── integration/
+│   │   └── test_api.py
+│   └── conftest.py
+├── samples/                    ← sample data files
+├── scripts/
+│   └── start.sh
+├── .github/workflows/
+│   └── ci.yml
+├── pyproject.toml
+├── Dockerfile
+├── docker-compose.yml
+└── README.md
 ```
 
-### Running Tests
+---
+
+## Testing
+
 ```bash
 # Run all tests
-python -m pytest tests/ -v
+pytest tests/ -v
 
 # Run with coverage
-python -m pytest tests/ --cov=backend
+pytest tests/ --cov=api --cov-report=term-missing
+
+# Lint
+ruff check api/ app/
+
+# Type check
+mypy api/
 ```
 
-## 🔒 Security
+---
 
-- Input validation for all file uploads
-- Size limits for uploads
-- API key authentication
-- CORS protection
-- Secure file handling
-
-## 📝 Configuration
-
-Key configuration options in `.env`:
-
-| Variable | Description | Default |
-|----------|-------------|---------|
-| MAX_UPLOAD_SIZE | Maximum file size (MB) | 10 |
-| MAX_ROWS | Maximum rows in CSV | 1000000 |
-| MAX_TEXT_LENGTH | Maximum text length | 1000000 |
-| MAX_IMAGE_DIMENSION | Maximum image dimension | 4096 |
-
-## 🤝 Contributing
+## Contributing
 
 1. Fork the repository
-2. Create your feature branch
-3. Commit your changes
-4. Push to the branch
-5. Create a Pull Request
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Write tests for your changes
+4. Ensure `pytest` and `ruff check` pass
+5. Commit your changes (`git commit -m 'Add amazing feature'`)
+6. Push to the branch (`git push origin feature/amazing-feature`)
+7. Open a Pull Request
 
-## 📄 License
+---
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+## License
 
-## 🙏 Acknowledgments
+This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
 
-- Built with modern Python tools and libraries
-- Inspired by real-world preprocessing needs
-- Community contributions welcome 
+---
+
+<p align="center">
+  Built with ❤️ by <a href="https://github.com/vismaytk">Vismay TK</a>
+</p>
